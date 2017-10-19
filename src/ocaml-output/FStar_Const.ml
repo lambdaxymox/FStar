@@ -35,6 +35,8 @@ type sconst =
   FStar_Pervasives_Native.tuple2
   | Const_string of (Prims.string,FStar_Range.range)
   FStar_Pervasives_Native.tuple2
+  | Const_range_of
+  | Const_set_range_of
   | Const_range of FStar_Range.range
   | Const_reify
   | Const_reflect of FStar_Ident.lid[@@deriving show]
@@ -82,17 +84,23 @@ let uu___is_Const_string: sconst -> Prims.bool =
 let __proj__Const_string__item___0:
   sconst -> (Prims.string,FStar_Range.range) FStar_Pervasives_Native.tuple2 =
   fun projectee  -> match projectee with | Const_string _0 -> _0
+let uu___is_Const_range_of: sconst -> Prims.bool =
+  fun projectee  ->
+    match projectee with | Const_range_of  -> true | uu____261 -> false
+let uu___is_Const_set_range_of: sconst -> Prims.bool =
+  fun projectee  ->
+    match projectee with | Const_set_range_of  -> true | uu____266 -> false
 let uu___is_Const_range: sconst -> Prims.bool =
   fun projectee  ->
-    match projectee with | Const_range _0 -> true | uu____262 -> false
+    match projectee with | Const_range _0 -> true | uu____272 -> false
 let __proj__Const_range__item___0: sconst -> FStar_Range.range =
   fun projectee  -> match projectee with | Const_range _0 -> _0
 let uu___is_Const_reify: sconst -> Prims.bool =
   fun projectee  ->
-    match projectee with | Const_reify  -> true | uu____275 -> false
+    match projectee with | Const_reify  -> true | uu____285 -> false
 let uu___is_Const_reflect: sconst -> Prims.bool =
   fun projectee  ->
-    match projectee with | Const_reflect _0 -> true | uu____281 -> false
+    match projectee with | Const_reflect _0 -> true | uu____291 -> false
 let __proj__Const_reflect__item___0: sconst -> FStar_Ident.lid =
   fun projectee  -> match projectee with | Const_reflect _0 -> _0
 let eq_const: sconst -> sconst -> Prims.bool =
@@ -100,21 +108,21 @@ let eq_const: sconst -> sconst -> Prims.bool =
     fun c2  ->
       match (c1, c2) with
       | (Const_int (s1,o1),Const_int (s2,o2)) ->
-          (let uu____330 = FStar_Util.ensure_decimal s1 in
-           let uu____331 = FStar_Util.ensure_decimal s2 in
-           uu____330 = uu____331) && (o1 = o2)
-      | (Const_bytearray (a,uu____339),Const_bytearray (b,uu____341)) ->
+          (let uu____340 = FStar_Util.ensure_decimal s1 in
+           let uu____341 = FStar_Util.ensure_decimal s2 in
+           uu____340 = uu____341) && (o1 = o2)
+      | (Const_bytearray (a,uu____349),Const_bytearray (b,uu____351)) ->
           a = b
-      | (Const_string (a,uu____353),Const_string (b,uu____355)) -> a = b
+      | (Const_string (a,uu____363),Const_string (b,uu____365)) -> a = b
       | (Const_reflect l1,Const_reflect l2) -> FStar_Ident.lid_equals l1 l2
-      | uu____358 -> c1 = c2
+      | uu____368 -> c1 = c2
 let rec pow2: Prims.int -> Prims.int =
   fun x  ->
     match x with
     | _0_27 when _0_27 = (Prims.parse_int "0") -> Prims.parse_int "1"
-    | uu____367 ->
-        let uu____368 = pow2 (x - (Prims.parse_int "1")) in
-        (Prims.parse_int "2") * uu____368
+    | uu____377 ->
+        let uu____378 = pow2 (x - (Prims.parse_int "1")) in
+        (Prims.parse_int "2") * uu____378
 let bounds:
   signedness -> width -> (Prims.int,Prims.int) FStar_Pervasives_Native.tuple2
   =
@@ -126,13 +134,13 @@ let bounds:
         | Int16  -> Prims.parse_int "16"
         | Int32  -> Prims.parse_int "32"
         | Int64  -> Prims.parse_int "64" in
-      let uu____382 =
+      let uu____392 =
         match signedness with
         | Unsigned  ->
-            let uu____391 =
-              let uu____392 = pow2 n1 in uu____392 - (Prims.parse_int "1") in
-            ((Prims.parse_int "0"), uu____391)
+            let uu____401 =
+              let uu____402 = pow2 n1 in uu____402 - (Prims.parse_int "1") in
+            ((Prims.parse_int "0"), uu____401)
         | Signed  ->
             let upper = pow2 (n1 - (Prims.parse_int "1")) in
             ((- upper), (upper - (Prims.parse_int "1"))) in
-      match uu____382 with | (lower,upper) -> (lower, upper)
+      match uu____392 with | (lower,upper) -> (lower, upper)

@@ -28,6 +28,10 @@ let mlconst_of_const':
         FStar_Extraction_ML_Syntax.MLC_Bytes bytes
     | FStar_Const.Const_string (s,uu____73) ->
         FStar_Extraction_ML_Syntax.MLC_String s
+    | FStar_Const.Const_range_of  ->
+        failwith "Unhandled constant: range_of/set_range_of"
+    | FStar_Const.Const_set_range_of  ->
+        failwith "Unhandled constant: range_of/set_range_of"
     | FStar_Const.Const_reify  ->
         failwith "Unhandled constant: reify/reflect"
     | FStar_Const.Const_reflect uu____74 ->
