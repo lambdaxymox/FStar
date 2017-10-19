@@ -132,6 +132,8 @@ let extend_to_end_of_line r = mk_range (file_of_range r)
                                        (start_of_range r)
                                        (end_of_line (end_of_range r))
 
+(* This needs to correspond with the `range` type is ulib/ml/prims.ml,
+ * but sadly we cannot use Prims.range here *)
 let prims_to_fstar_range (r : (string * (int * int) * (int * int)) * (string * (int * int) * (int * int))) : range =
     let (r1, r2) = r in
     let (f1, s1, e1) = r1 in
