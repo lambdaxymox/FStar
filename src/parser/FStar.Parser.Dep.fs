@@ -157,8 +157,12 @@ let enter_namespace (original_map: map) (working_map: map) (prefix: string): boo
         String.substring k (String.length prefix) (String.length k - String.length prefix)
       in
       let filename = must (smap_try_find original_map k) in
-      smap_add working_map suffix filename;
-      found := true
+      match smap_try_find working_map suffix with
+      | Some _ -> ()
+      | None -> begin
+        smap_add working_map suffix filename;
+        found := true
+        end
   ) (List.unique (smap_keys original_map));
   !found
 
