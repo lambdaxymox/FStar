@@ -105,6 +105,8 @@ let bv_to_nat_lid: FStar_Ident.lident = bvconst "bv2int"
 let bv_and_lid: FStar_Ident.lident = bvconst "bvand"
 let bv_xor_lid: FStar_Ident.lident = bvconst "bvxor"
 let bv_or_lid: FStar_Ident.lident = bvconst "bvor"
+let bv_add_lid: FStar_Ident.lident = bvconst "bvadd"
+let bv_sub_lid: FStar_Ident.lident = bvconst "bvsub"
 let bv_shift_left_lid: FStar_Ident.lident = bvconst "bvshl"
 let bv_shift_right_lid: FStar_Ident.lident = bvconst "bvshr"
 let bv_udiv_lid: FStar_Ident.lident = bvconst "bvdiv"
@@ -194,6 +196,8 @@ let const_to_string: FStar_Const.sconst -> Prims.string =
     | FStar_Const.Const_char c ->
         Prims.strcat "'" (Prims.strcat (FStar_Util.string_of_char c) "'")
     | FStar_Const.Const_range r -> FStar_Range.string_of_range r
+    | FStar_Const.Const_range_of  -> "range_of"
+    | FStar_Const.Const_set_range_of  -> "set_range_of"
     | FStar_Const.Const_reify  -> "reify"
     | FStar_Const.Const_reflect l ->
         let uu____144 = sli l in
