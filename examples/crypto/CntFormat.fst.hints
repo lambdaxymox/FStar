@@ -11,7 +11,7 @@
         "equation_FStar.Char.char", "equation_Platform.Bytes.byte"
       ],
       0,
-      "f81b96750fb352d4c3158150fa82ea7a"
+      "5980d0a881262e8c7bba569d42bca91e"
     ],
     [
       "CntFormat.append_inj_lemma",
@@ -23,7 +23,7 @@
         "equation_FStar.Char.char", "equation_Platform.Bytes.byte"
       ],
       0,
-      "d784034fbad9e9708e4c8a170008ea66"
+      "d3ecc40e60213ebeb704508d64c8e5a3"
     ],
     [
       "CntFormat.append_inj_lemma",
@@ -35,7 +35,7 @@
         "equation_FStar.Char.char", "equation_Platform.Bytes.byte"
       ],
       0,
-      "2a6fd23a0c00c13576571455d6d54cc5"
+      "5d3a7fd438aa87358a5cd6da258b070d"
     ],
     [
       "CntFormat.append_inj_lemma",
@@ -59,43 +59,7 @@
         "typing_CntFormat.op_At_Bar", "typing_FStar.Seq.Base.eq"
       ],
       0,
-      "d7bc9fc29e75d3866674e97ebfa84e4f"
-    ],
-    [
-      "CntFormat.uint16_to_bytes",
-      1,
-      2,
-      1,
-      [ "@query", "projection_inverse_BoxInt_proj_0" ],
-      0,
-      "3eca4f5587ea35b9448d011d7a98ca95"
-    ],
-    [
-      "CntFormat.uint32_to_bytes",
-      1,
-      2,
-      1,
-      [ "@query", "projection_inverse_BoxInt_proj_0" ],
-      0,
-      "3e0e686f23727b1a6920a2c2b614fb90"
-    ],
-    [
-      "CntFormat.bytes_to_uint16",
-      1,
-      2,
-      1,
-      [ "@query", "projection_inverse_BoxInt_proj_0" ],
-      0,
-      "948c429746b24d1a5344044f738a57f9"
-    ],
-    [
-      "CntFormat.bytes_to_uint32",
-      1,
-      2,
-      1,
-      [ "@query", "projection_inverse_BoxInt_proj_0" ],
-      0,
-      "e7117ba19ea1fc7f3ef3e661a26f48e0"
+      "93d8b5bd452b2e5c4460a2f8e10ca84f"
     ],
     [
       "CntFormat.UTF8_inj",
@@ -107,34 +71,7 @@
         "equation_FStar.Char.char", "equation_Platform.Bytes.byte"
       ],
       0,
-      "253ba39dfe1dbf38b34f305a1fb77a97"
-    ],
-    [
-      "CntFormat.tag0",
-      1,
-      2,
-      1,
-      [ "@query", "projection_inverse_BoxInt_proj_0" ],
-      0,
-      "973ff547067d16a7bcfd340d14fb3993"
-    ],
-    [
-      "CntFormat.tag1",
-      1,
-      2,
-      1,
-      [ "@query", "projection_inverse_BoxInt_proj_0" ],
-      0,
-      "9e78620a9298fdcedc835f61b8942a8b"
-    ],
-    [
-      "CntFormat.tag2",
-      1,
-      2,
-      1,
-      [ "@query", "projection_inverse_BoxInt_proj_0" ],
-      0,
-      "b8f38bbb7efc9ea07ce7777739683c56"
+      "2c0a0ca43ea7d7c806bffd861df4c536"
     ],
     [
       "CntFormat.response",
@@ -146,7 +83,7 @@
         "refinement_interpretation_CntFormat_Tm_refine_f5cfff85cb7c9a21e92347e29fc626c9"
       ],
       0,
-      "7f1b51c3acaf2868000f239205da4471"
+      "b1a1fc55750c1a7a0d6dd400e9b41bec"
     ],
     [
       "CntFormat.signal",
@@ -158,7 +95,7 @@
         "projection_inverse_BoxInt_proj_0"
       ],
       0,
-      "4575f587dbb92fb6b3613b02d5f3aea2"
+      "c105ab2126193102049cae3f0a2eeb8d"
     ],
     [
       "CntFormat.signal",
@@ -181,7 +118,7 @@
         "refinement_interpretation_Platform.Bytes_Tm_refine_3458b9f6f40fe62446cdc2c6d3755a94"
       ],
       0,
-      "67357de0cbb7f799de784124daefbf7b"
+      "9222789d9bc1b57f7fb8428e6025faf7"
     ],
     [
       "CntFormat.signal_split",
@@ -200,7 +137,7 @@
         "projection_inverse_BoxInt_proj_0"
       ],
       0,
-      "cb94b39c5abf680b08cc62efef3b2a0f"
+      "d15fd29ba6e41b890975a273aade1653"
     ],
     [
       "CntFormat.signal_split",
@@ -212,7 +149,7 @@
         "projection_inverse_BoxInt_proj_0"
       ],
       0,
-      "7a56d31de3a09518fde148d65c05bc2f"
+      "7ce52c477ca03d2d069b0bbe662d0b17"
     ],
     [
       "CntFormat.signal_split",
@@ -249,7 +186,7 @@
         "refinement_interpretation_Platform.Bytes_Tm_refine_71050496a0b6bdbab08b701114cb2b13"
       ],
       0,
-      "6eeab8b907a349c38df0fbddf1c77ebc"
+      "9b91632dad290afd5a96d19d480e38a1"
     ],
     [
       "CntFormat.signal_components_corr",
@@ -261,7 +198,7 @@
         "equation_FStar.Char.char", "equation_Platform.Bytes.byte"
       ],
       0,
-      "a51b8209fdecd9f927569a0b50d51b91"
+      "cae9475a6f2fff4fdcf405e7c7606498"
     ],
     [
       "CntFormat.signal_components_corr",
@@ -275,7 +212,7 @@
         "haseqPrims_Tm_refine_ba523126f67e00e7cd55f0b92f16681d"
       ],
       0,
-      "fbaa8e37a2941b185356cf025e53c18e"
+      "230131940a27cf9315f5caccf65328bc"
     ],
     [
       "CntFormat.signal_components_corr",
@@ -289,7 +226,7 @@
         "haseqPrims_Tm_refine_ba523126f67e00e7cd55f0b92f16681d"
       ],
       0,
-      "6d27ca3ce584de409d548280434766f5"
+      "741af081e750dfa96b358e4fe3b5929b"
     ],
     [
       "CntFormat.signal_components_corr",
@@ -301,7 +238,7 @@
         "projection_inverse_BoxInt_proj_0"
       ],
       0,
-      "597e40e77c5e5b803ef7070c6486b844"
+      "23cf0bc0189652f9c8d4510a0f6cb699"
     ],
     [
       "CntFormat.signal_components_corr",
@@ -313,7 +250,7 @@
         "projection_inverse_BoxInt_proj_0"
       ],
       0,
-      "123a0f02a1744fd9a3fb190e9b53220f"
+      "a8983ab989fb7d5d32bd1c65ceb6e4ac"
     ]
   ]
 ]

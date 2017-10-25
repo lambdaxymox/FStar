@@ -1010,7 +1010,7 @@ and tc_abs env (top:term) (bs:binders) (body:term) : term * lcomp * guard_t =
                       | Some (Inl more_bs) ->  //more actual args
                         let c = SS.subst_comp subst c_expected in
                         (* the expected type is explicitly curried *)
-                        if U.is_named_tot c then
+                        if Options.ml_ish () || U.is_named_tot c then
                           let t = N.unfold_whnf env (U.comp_result c) in
                           match t.n with
                           | Tm_arrow(bs_expected, c_expected) ->
@@ -1227,8 +1227,8 @@ and check_application_args env head chead ghead args expected_topt : term * lcom
       let shortcuts_evaluation_order =
         match (SS.compress head).n with
         | Tm_fvar fv ->
-			     S.fv_eq_lid fv Parser.Const.op_And ||
-			     S.fv_eq_lid fv Parser.Const.op_Or
+                             S.fv_eq_lid fv Parser.Const.op_And ||
+                             S.fv_eq_lid fv Parser.Const.op_Or
         | _ -> false
       in
 
@@ -1455,7 +1455,14 @@ and tc_eqn scrutinee env branch
       * term                               (* terms corresponding to the pattern                                    *)
       * term                               (* the same term in normal form                                          *)
       =
-    let pat_bvs, exp, p = TcUtil.pat_as_exp allow_implicits env p0 in //an expression for each clause in a disjunctive pattern
+    let tc_annot env t =
+        let tu, u = U.type_u () in
+        let t, _, g = tc_check_tot_or_gtot_term env t tu in
+        Rel.force_trivial_guard env g;
+        t
+    in
+    //an expression for each clause in a disjunctive pattern
+    let pat_bvs, exp, p = TcUtil.pat_as_exp allow_implicits env p0 tc_annot in
     if Env.debug env Options.High
     then BU.print2 "Pattern %s elaborated to %s\n" (Print.pat_to_string p0) (Print.pat_to_string p);
     let pat_env = List.fold_left Env.push_bv env pat_bvs in
@@ -1493,16 +1500,19 @@ and tc_eqn scrutinee env branch
         //Otherwise, its easy to get inconsistent;
         //e.g., if expected_pat_t is (option nat)
         //and   lc.res_typ is (option int)
-        //Rel.teq below will produce a logical guard (int = nat)
-        //which will fail the discharge_guard_no_smt check
-        //Without out, we will be able to conclude in the branch of the pattern,
+        //Rel.teq_nosmt below will forbid producing a logical guard (int = nat)
+        //Without this, we will be able to conclude in the branch of the pattern,
         //with the equality Some #nat x = Some #int x
         //that nat=int and hence False
-        let g' = Rel.teq env1 lc.res_typ expected_pat_t in
-        let g = Rel.conj_guard g g' in
-        let env1 = Env.set_range env1 exp.pos in
-        Rel.discharge_guard_no_smt env1 g |>
-        Rel.resolve_implicits in
+        if Rel.teq_nosmt env1 lc.res_typ expected_pat_t
+        then let env1 = Env.set_range env1 exp.pos in
+             Rel.discharge_guard_no_smt env1 g |>
+             Rel.resolve_implicits
+        else raise (Error (BU.format2 "Inferred type of pattern (%s) is incompatible with the type of the scrutinee (%s)"
+                                       (Print.term_to_string lc.res_typ)
+                                       (Print.term_to_string expected_pat_t),
+                           exp.pos))
+    in
     let norm_exp = N.normalize [N.Beta] env1 exp in
     let uvs1 = Free.uvars norm_exp in
     let uvs2 = Free.uvars expected_pat_t in
@@ -1722,7 +1732,9 @@ and check_top_level_let env e =
             then g1, N.reduce_uvar_solutions env e1, univ_vars, c1
             else let g1 = Rel.solve_deferred_constraints env g1 |> Rel.resolve_implicits in
                  assert (univ_vars = []) ;
-                 let _, univs, e1, c1 = List.hd (TcUtil.generalize env false [lb.lbname, e1, c1.comp()]) in
+                 let _, univs, e1, c1, gvs = List.hd (TcUtil.generalize env false [lb.lbname, e1, c1.comp()]) in
+                 let g1 = map_guard g1 <| N.normalize [N.Beta; N.NoDeltaSteps; N.CompressUvars; N.NoFullNorm; N.Exclude N.Zeta] env in
+                 let g1 = abstract_guard_n gvs g1 in
                  g1, e1, univs, U.lcomp_of_comp c1
          in
 
@@ -1837,7 +1849,7 @@ and check_top_level_let_rec env top =
                                 lb.lbname,
                                 lb.lbdef,
                                 S.mk_Total lb.lbtyp)) in
-                   ecs |> List.map (fun (x, uvs, e, c) ->
+                   ecs |> List.map (fun (x, uvs, e, c, gvs) ->
                       U.close_univs_and_mk_letbinding all_lb_names x uvs (U.comp_result c) (U.comp_effect_name c) e) in
 
           let cres = U.lcomp_of_comp <| S.mk_Total t_unit in
@@ -1897,6 +1909,7 @@ and check_inner_let_rec env top =
 and build_let_rec_env top_level env lbs : list<letbinding> * env_t =
    let env0 = env in
    let termination_check_enabled lbname lbdef lbtyp =
+     if Options.ml_ish () then false else
      let t = N.unfold_whnf env lbtyp in
      match (SS.compress t).n, (SS.compress lbdef).n with
      | Tm_arrow (formals, c), Tm_abs(actuals, _, _) ->
@@ -2054,7 +2067,10 @@ and check_lbtyp top_level env lb : option<typ>  (* checked version of lb.lbtyp, 
 and tc_binder env (x, imp) =
     let tu, u = U.type_u () in
     if Env.debug env Options.Extreme
-    then BU.print3 "Checking binders %s:%s at type %s\n" (Print.bv_to_string x) (Print.term_to_string x.sort) (Print.term_to_string tu);
+    then BU.print3 "Checking binders %s:%s at type %s\n"
+                   (Print.bv_to_string x)
+                   (Print.term_to_string x.sort)
+                   (Print.term_to_string tu);
     let t, _, g = tc_check_tot_or_gtot_term env x.sort tu in //ghost effect ok in the types of binders
     let x = {x with sort=t}, imp in
     if Env.debug env Options.High

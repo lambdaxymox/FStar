@@ -143,6 +143,7 @@ val initial_env : (env -> term -> term*lcomp*guard_t) ->
 val should_verify   : env -> bool
 val incr_query_index: env -> env
 val string_of_delta_level : delta_level -> string
+val rename_env : subst_t -> env -> env
 
 (* Marking and resetting the environment, for the interactive mode *)
 val push               : env -> string -> env
@@ -254,3 +255,8 @@ val rem_proof_ns    : env -> name_prefix -> env
 val get_proof_ns    : env -> proof_namespace
 val set_proof_ns    : proof_namespace -> env -> env
 val string_of_proof_ns : env -> string
+
+(* Check that all free variables of the term are defined in the environment *)
+val unbound_vars    : env -> term -> BU.set<bv>
+val closed          : env -> term -> bool
+val closed'         : term -> bool

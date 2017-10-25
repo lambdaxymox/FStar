@@ -10,6 +10,9 @@ open FStar.Reflection
 open FStar.Reflection.Types
 open FStar.Tactics.Types
 
+assume private val __fail : a:Type -> string -> __tac a
+let fail (#a:Type) (msg:string) : tactic a = fun () -> TAC?.reflect (__fail a msg)
+
 assume private val __top_env     : __tac env
 (** [top_env] returns the environment where the tactic started running.
  * This works even if no goals are present. *)
@@ -89,6 +92,12 @@ assume private val __norm_term_env  : env -> list norm_step -> term -> __tac ter
 using the list of steps [steps], over environment [e]. The list has the same meaning as for [norm]. *)
 let norm_term_env env steps t : tactic term = fun () -> TAC?.reflect (__norm_term_env env steps t)
 
+assume private val __norm_binder_type  : list norm_step -> binder -> __tac unit
+(** [norm_binder_type steps b] will call the normalizer on the type of the [b]
+binder for the current goal. Notably, this cannot be done via binder_retype and norm,
+because of uvars being resolved to lambda-abstractions. *)
+let norm_binder_type steps b : tactic unit = fun () -> TAC?.reflect (__norm_binder_type steps b)
+
 assume private val __intro  : __tac binder
 (** [intro] pushes the first argument of an arrow goal into the
 environment, turning [Gamma |- ?u : x:a -> b] into [Gamma, x:a |- ?u' : b].
@@ -166,6 +175,11 @@ assume private val __exact : term -> __tac unit
 [t] in [Gamma]. Also, [e] needs to unift with [w], but this will almost
 always be the case since [w] is usually a uvar. *)
 let exact (t:tactic term) : tactic unit = fun () -> let tt = t () in TAC?.reflect (__exact tt)
+
+assume private val __exact_guard : term -> __tac unit
+(** Like [exact], but allows for the term [e] to have a type [t] only
+under some guard [g], adding the guard as a goal. *)
+let exact_guard (t:tactic term) : tactic unit = fun () -> let tt = t () in TAC?.reflect (__exact_guard tt)
 
 assume private val __apply : term -> __tac unit
 (** [apply f] will attempt to produce a solution to the goal by an application
